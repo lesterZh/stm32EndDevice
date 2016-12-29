@@ -43,7 +43,7 @@ void USART2_Init( u32 bound )
     USART_Cmd(USART2, ENABLE);
 }
 
-void USART2_send_chars(unsigned char * chars)
+void USART2_send_chars( char * chars)
 {
 	 
     while (*chars)   

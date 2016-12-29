@@ -5,28 +5,22 @@ void motor_init(void)
 { 
 	 GPIO_InitTypeDef  GPIO_InitStructure;
 		
-	 RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 //Ê¹ÄÜPB¶Ë¿ÚÊ±ÖÓ
+	 RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);	 //Ê¹ÄÜPB¶Ë¿ÚÊ±ÖÓ
 		
-	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;				 //MA-->PB.5 ¶Ë¿ÚÅäÖÃ
+	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_8|GPIO_Pin_7|GPIO_Pin_6;				 //MA-->PB.5 ¶Ë¿ÚÅäÖÃ
 	 GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //ÍÆÍìÊä³ö
 	 GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 //IO¿ÚËÙ¶ÈÎª50MHz
-	 GPIO_Init(GPIOB, &GPIO_InitStructure);					 //¸ù¾İÉè¶¨²ÎÊı³õÊ¼»¯GPIOA.8
-	 GPIO_ResetBits(GPIOB,GPIO_Pin_5);						 //PB.5 Êä³öµÍ
+	 GPIO_Init(GPIOC, &GPIO_InitStructure);					 //¸ù¾İÉè¶¨²ÎÊı³õÊ¼»¯GPIOA.8
+	 GPIO_ResetBits(GPIOC, GPIO_Pin_9);						 //PB.5 Êä³öµÍ
 
-	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;	    	//MBö
-	 GPIO_Init(GPIOB, &GPIO_InitStructure);	  				//ÍÆÍìÊä³ö £¬IO¿ÚËÙ¶ÈÎª50MHz
-	 GPIO_ResetBits(GPIOB,GPIO_Pin_6);					
+	 GPIO_ResetBits(GPIOC,GPIO_Pin_6);					
 
-	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;	    	//MC
-	 GPIO_Init(GPIOB, &GPIO_InitStructure);	  				//ÍÆÍìÊä³ö £¬IO¿ÚËÙ¶ÈÎª50MHz
-	 GPIO_ResetBits(GPIOB,GPIO_Pin_7);						  
+	 GPIO_ResetBits(GPIOC,GPIO_Pin_7);						  
 
-	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;	    	//MD
-	 GPIO_Init(GPIOB, &GPIO_InitStructure);	  				//ÍÆÍìÊä³ö £¬IO¿ÚËÙ¶ÈÎª50MHz
-	 GPIO_ResetBits(GPIOB,GPIO_Pin_8);						  	
+	 GPIO_ResetBits(GPIOC,GPIO_Pin_8);						  	
 }
 
-int delay = 4000;
+int delay = 4000;//
 
 
 void motor_run_half(void)

@@ -4,7 +4,7 @@
 #include "led.h"
 #include "timer.h"
 #include "stepMotor.h"
-
+#include "lcd.h"
 
 void capture_init(void)
 {
@@ -73,6 +73,8 @@ void start_cal_distance(void)
 	state_dis = 1;//触发
 }
 
+char show[30] = {0};
+
 //外部中断，计算echo引脚高电平的时间
 void EXTI1_IRQHandler(void)
 {
@@ -99,7 +101,10 @@ void EXTI1_IRQHandler(void)
 			cal_ts = 0;
 			cal_average = cal_sum / 10.0;//10次
 			cal_sum = 0;
-			printf("\r\ndis: %.1f cm\r\n", cal_average / 10.0);
+			
+			//printf("\r\ndis: %.1f cm\r\n", cal_average / 10.0);
+			sprintf(show, "dis: %.1f cm", cal_average / 10.0);
+			LCD_P8x16Str(0,2,show);
 			
 			if (open_lock == 1 && have_car == 0 && cal_average < 1000) //小于1m
 			{
@@ -108,7 +113,9 @@ void EXTI1_IRQHandler(void)
 				{
 					car_come_confirm = 0;
 					have_car = 1;//认为有车来
-					printf("\r\na car come in\r\n\r\n");
+					//printf("\r\na car come in\r\n\r\n");
+					sprintf(show, "a car come in");
+					LCD_P8x16Str(0,2,show);
 				}
 				
 			} 
@@ -120,7 +127,9 @@ void EXTI1_IRQHandler(void)
 					car_leave_confirm = 0;
 					have_car = 0;//认为车离开了
 					open_lock = 0;//车位锁关闭
-					printf("\r\na car leave\r\n\r\n");
+					//printf("\r\na car leave\r\n\r\n");
+					sprintf(show, "a car leave");
+					LCD_P8x16Str(0,2,show);
 					motor_run(0, 90);//车位锁关闭
 				}
 				
@@ -137,7 +146,8 @@ void TIM3_IRQHandler(void)   //TIM3中断
 	{
 		TIM_ClearITPendingBit(TIM3, TIM_IT_Update );  //清除TIMx的中断待处理位:TIM 中断源 
 		state_dis = 0;//恢复到初始化状态
-		printf("unkown\r\n");//长时间未收到反射波，长度无法测量
+		//printf("unkown\r\n");//长时间未收到反射波，长度无法测量
+		LCD_P8x16Str(0,2,"dis:unkown");
 		TIM_Cmd(TIM3, DISABLE);//关闭定时器
 	}
 }

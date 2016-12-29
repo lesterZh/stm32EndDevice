@@ -5,6 +5,6 @@
 
 void USART2_Init( u32 bound );
 void USART2_send_data(unsigned char * data, int len);
-void USART2_send_chars(unsigned char * chars);
+void USART2_send_chars(char * chars);
 
 #endif

@@ -8,6 +8,7 @@
 "..\obj\stepmotor.o"
 "..\obj\capture.o"
 "..\obj\usart2.o"
+"..\obj\lcd.o"
 "..\obj\delay.o"
 "..\obj\sys.o"
 "..\obj\usart.o"

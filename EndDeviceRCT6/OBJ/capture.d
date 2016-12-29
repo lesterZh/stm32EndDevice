@@ -37,3 +37,4 @@
 ..\obj\capture.o: ..\HARDWARE\LED\led.h
 ..\obj\capture.o: ..\HARDWARE\timer.h
 ..\obj\capture.o: ..\HARDWARE\stepMotor.h
+..\obj\capture.o: ..\HARDWARE\lcd.h

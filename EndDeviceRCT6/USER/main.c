@@ -7,6 +7,8 @@
 #include "stepMotor.h"
 #include "capture.h"
 #include "usart2.h"
+#include "lcd.h"
+
 
 void keyFun(void);
 int dir = 1;
@@ -28,6 +30,10 @@ int open_lock = 0; //车位锁是否开启
 	
 	motor_init();
 	capture_init();
+	
+	LCD_Init() ;
+	LCD_P8x16Str(0,0,"hello,lcd");
+	 
 	 
 	while(1)
 	{
@@ -54,19 +60,23 @@ void keyFun(void)
 	int t=KEY_Scan(0);		//得到键值
 	switch(t)
 	{				 
-		case KEY0_PRES:
-			printf("%d\r\n",TIM3->CNT);
-			break;
 		case KEY1_PRES:
-			
+			printf("key1\r\n");
 			break;
-		case WKUP_PRES:	
-			//motor_run(dir,angle);
+		case KEY2_PRES:
+			printf("key2\r\n");
+			dir = 0;
+			motor_run(dir,angle);
+			break;
+		case KEY3_PRES:	
+			printf("key3\r\n");
+			dir = 1;
+			motor_run(dir,angle);
 			
 			//trig = !trig;
 			break;
 		default:;
-			//delay_ms(10);	
+			delay_ms(10);	
 	}
 }
 
@@ -82,9 +92,13 @@ void TIM2_IRQHandler(void)   //TIM3中断
 			LED1=!LED1;
 		}
 		
-		if (timer10ms % 100 == 0) 
+		if (timer10ms % 300 == 0) 
 		{
 			//printf("angle %d\r\n",angle);  
+			LED2=!LED2;
+			LED3=!LED3;
+			
+			USART2_send_chars("u2\r\n");
 		}
 		
 		if (timer10ms % 10 == 0) //1s测10次

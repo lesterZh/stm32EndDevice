@@ -39,3 +39,4 @@
 ..\obj\main.o: ..\HARDWARE\stepMotor.h
 ..\obj\main.o: ..\HARDWARE\capture.h
 ..\obj\main.o: ..\HARDWARE\usart2.h
+..\obj\main.o: ..\HARDWARE\lcd.h

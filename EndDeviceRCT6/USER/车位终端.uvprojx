@@ -458,6 +458,11 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\usart2.c</FilePath>
             </File>
+            <File>
+              <FileName>LCD.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\LCD.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
