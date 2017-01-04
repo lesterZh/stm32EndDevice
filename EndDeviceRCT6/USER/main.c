@@ -13,12 +13,19 @@
 void keyFun(void);
 int dir = 1;
 int angle = 90;
-int open_lock = 0; //车位锁是否开启
+
+char lcd_show[10] = {0};
+
+char rec_buf[3] = {0};
+char rec_index = 0;
+char self_num[2] = {0x00, 0x03};//停车位编号
+
+//车位锁默认是开启的，此时车辆无法进来
+volatile int is_lock_open = 1; //0 close,  1 open
+
 
  int main(void)
  {	
-	u8 t;
-	u8 len;	 
  
 	delay_init();	    	 //延时函数初始化	
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);// 设置中断优先级分组2
@@ -32,23 +39,13 @@ int open_lock = 0; //车位锁是否开启
 	capture_init();
 	
 	LCD_Init() ;
-	LCD_P8x16Str(0,0,"hello,lcd");
-	 
+	sprintf(lcd_show, "device:%d", self_num[1]);
+	LCD_P8x16Str(0,0,lcd_show);
+	LCD_P8x16Str(0,4,"lock open  ");
 	 
 	while(1)
 	{
-		if(USART_RX_STA&0x8000)
-		{					   
-			len=USART_RX_STA&0x3fff;//得到此次接收到的数据长度
-			printf("\r\n您发送的消息为:\r\n");
-			for(t=0;t<len;t++)
-			{
-				USART1->DR=USART_RX_BUF[t];
-				while((USART1->SR&0X40)==0);//等待发送结束
-			}
-			printf("\r\n\r\n");//插入换行
-			USART_RX_STA=0;
-		}
+		
 		keyFun();
 		//motor_run();
 		
@@ -98,7 +95,7 @@ void TIM2_IRQHandler(void)   //TIM3中断
 			LED2=!LED2;
 			LED3=!LED3;
 			
-			USART2_send_chars("u2\r\n");
+			//USART2_send_chars("d2\r\n");
 		}
 		
 		if (timer10ms % 10 == 0) //1s测10次
@@ -119,34 +116,57 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 		res =USART_ReceiveData(USART1);	//读取接收到的数据
 		if (res == 0x55)
 		{
-			if (open_lock == 0) 
-			{
-				printf("open lock\r\n");
-				motor_run(1, 90);
-				open_lock = 1;
-			}
 			
 		}			
     } 
 } 
 
+
 void USART2_IRQHandler(void)    
 {  
-    u8 res;
+    static u8 recCommandFlag = 0;
+	u8 res;
 	if(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == SET)  
     {       
 		res = USART_ReceiveData(USART2);	//读取接收到的数据
 		//USART_SendData(USART2, res);
-		if (res == 0x55)
+		//整个协议：协议头0x5A + 车位编号  (2byte)+ 命令  (1byte)
+		if (res == 0x5A) //接受到协议头0x5A
 		{
-			if (open_lock == 0) 
+			recCommandFlag = 1;
+			return;
+		} 
+		
+		//命令模式 
+		if (recCommandFlag == 1)
+		{
+			rec_buf[rec_index++] = res;
+			if (rec_index == 3) 
 			{
-				printf("open lock\r\n");
-				motor_run(1, 90);
-				open_lock = 1;
+				if (rec_buf[1] == self_num[1]) 
+				{
+					if (rec_buf[2] == 0x51 && is_lock_open == 0) // open lock ,车辆无法进来
+					{
+						LCD_P8x16Str(0,4,"lock open ");
+						is_lock_open = 1;
+						motor_run(1, 90);
+						
+					} 
+					else if (rec_buf[2] == 0x52 && is_lock_open == 1)// close lock，车辆可以进来
+					{
+						LCD_P8x16Str(0,4,"lock close");
+						LCD_P8x16Str(0,6,"            ");
+						is_lock_open = 0;
+						motor_run(0, 90);
+					}
+				}
+				
+				recCommandFlag = 0;
+				rec_index = 0;
 			}
-			
-		}		
+		}
+		
+				
     }
       
 }

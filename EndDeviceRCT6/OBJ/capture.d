@@ -38,3 +38,4 @@
 ..\obj\capture.o: ..\HARDWARE\timer.h
 ..\obj\capture.o: ..\HARDWARE\stepMotor.h
 ..\obj\capture.o: ..\HARDWARE\lcd.h
+..\obj\capture.o: ..\HARDWARE\usart2.h

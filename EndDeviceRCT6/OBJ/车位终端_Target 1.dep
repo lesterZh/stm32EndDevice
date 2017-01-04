@@ -1,5 +1,5 @@
 Dependencies for Project '≥µŒª÷’∂À', Target 'Target 1': (DO NOT MODIFY !)
-F (.\main.c)(0x5864BA9F)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE-I G:\STM32\stm_source\stm32EndDevice\EndDeviceRCT6\USER\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x586B96F2)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE-I G:\STM32\stm_source\stm32EndDevice\EndDeviceRCT6\USER\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (..\HARDWARE\LED\led.h)(0x58633560)
 I (..\SYSTEM\sys\sys.h)(0x584A5E73)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
@@ -237,7 +237,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\SYSTEM\usart\usart.h)(0x50517A82)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5475F300)
 I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
-F (..\HARDWARE\capture.c)(0x5864BD47)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE-I G:\STM32\stm_source\stm32EndDevice\EndDeviceRCT6\USER\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\capture.o --omf_browse ..\obj\capture.crf --depend ..\obj\capture.d)
+F (..\HARDWARE\capture.c)(0x586B8FFF)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE-I G:\STM32\stm_source\stm32EndDevice\EndDeviceRCT6\USER\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\capture.o --omf_browse ..\obj\capture.crf --depend ..\obj\capture.d)
 I (..\HARDWARE\capture.h)(0x584A74E2)
 I (..\SYSTEM\sys\sys.h)(0x584A5E73)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
@@ -275,6 +275,7 @@ I (..\HARDWARE\LED\led.h)(0x58633560)
 I (..\HARDWARE\timer.h)(0x584A4DD3)
 I (..\HARDWARE\stepMotor.h)(0x58634F6D)
 I (..\HARDWARE\lcd.h)(0x5864BA9E)
+I (..\HARDWARE\usart2.h)(0x5863551E)
 F (..\HARDWARE\usart2.c)(0x5863550F)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\HARDWARE\LED -I..\SYSTEM\delay -I..\SYSTEM\sys -I..\SYSTEM\usart -I..\USER -I..\STM32F10x_FWLib\inc -I..\CORE -I..\HARDWARE\KEY -I..\HARDWARE-I G:\STM32\stm_source\stm32EndDevice\EndDeviceRCT6\USER\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-I C:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\usart2.o --omf_browse ..\obj\usart2.crf --depend ..\obj\usart2.d)
 I (..\HARDWARE\usart2.h)(0x5863551E)
 I (..\SYSTEM\sys\sys.h)(0x584A5E73)

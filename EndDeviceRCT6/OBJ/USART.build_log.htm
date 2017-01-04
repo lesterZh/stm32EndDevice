@@ -26,18 +26,14 @@ Project File Date:  12/29/2016
 
 <h2>Output:</h2>
 Build target 'Target 1'
-compiling capture.c...
-..\HARDWARE\capture.c(107): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "unsigned char *"
-                        LCD_P8x16Str(0,2,show);
-..\HARDWARE\capture.c(118): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "unsigned char *"
-                                        LCD_P8x16Str(0,2,show);
-..\HARDWARE\capture.c(132): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "unsigned char *"
-                                        LCD_P8x16Str(0,2,show);
-..\HARDWARE\capture.c: 3 warnings, 0 errors
+compiling main.c...
+main.c(43): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "unsigned char *"
+        LCD_P8x16Str(0,0,lcd_show);
+main.c: 1 warning, 0 errors
 linking...
-Program Size: Code=18858 RO-data=2586 RW-data=1772 ZI-data=1868  
+Program Size: Code=19254 RO-data=2586 RW-data=1788 ZI-data=1676  
 FromELF: creating hex file...
-"..\OBJ\USART.axf" - 0 Error(s), 3 Warning(s).
+"..\OBJ\USART.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   G:\STM32\stm_source\stm32EndDevice\EndDeviceRCT6\USER\RTE

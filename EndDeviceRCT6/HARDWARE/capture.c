@@ -5,6 +5,7 @@
 #include "timer.h"
 #include "stepMotor.h"
 #include "lcd.h"
+#include "usart2.h"
 
 void capture_init(void)
 {
@@ -51,7 +52,9 @@ void capture_init(void)
 
 int state_dis = 0;//没有触发
 u16 time_cnt = 0;
-extern int open_lock;
+extern int is_lock_open;
+extern char self_num[2];
+
 int have_car = 0; //判断车是否到来
 int cal_ts = 0; //取几次计算距离的结果，求平均值
 float cal_sum = 0, cal_average = 0;
@@ -74,6 +77,7 @@ void start_cal_distance(void)
 }
 
 char show[30] = {0};
+unsigned char state_af[4] = {0x5a,0,1,0x53}; //向协调器发送反馈状态
 
 //外部中断，计算echo引脚高电平的时间
 void EXTI1_IRQHandler(void)
@@ -103,10 +107,11 @@ void EXTI1_IRQHandler(void)
 			cal_sum = 0;
 			
 			//printf("\r\ndis: %.1f cm\r\n", cal_average / 10.0);
-			sprintf(show, "dis: %.1f cm", cal_average / 10.0);
+			sprintf(show, "dis: %.1f cm  ", cal_average / 10.0);
 			LCD_P8x16Str(0,2,show);
 			
-			if (open_lock == 1 && have_car == 0 && cal_average < 1000) //小于1m
+			//is_lock_open == 0 && have_car == 0 && 
+			if (is_lock_open == 0 && have_car == 0 && cal_average < 1000) // < 0.5m
 			{
 				car_come_confirm++;
 				if (car_come_confirm == 3) //3次确认
@@ -114,23 +119,29 @@ void EXTI1_IRQHandler(void)
 					car_come_confirm = 0;
 					have_car = 1;//认为有车来
 					//printf("\r\na car come in\r\n\r\n");
-					sprintf(show, "a car come in");
-					LCD_P8x16Str(0,2,show);
+					
+					LCD_P8x16Str(0,6,"car come in");
 				}
 				
-			} 
-			else if (open_lock == 1 && have_car == 1 && cal_average > 1500)
+			} //is_lock_open == 0 && have_car == 1 && 
+			else if (is_lock_open == 0 && have_car == 1 && cal_average > 1500)
 			{
 				car_leave_confirm++;
 				if (car_leave_confirm == 3) //3次确认
 				{
 					car_leave_confirm = 0;
 					have_car = 0;//认为车离开了
-					open_lock = 0;//车位锁关闭
+					is_lock_open = 1;//车位自动打开
 					//printf("\r\na car leave\r\n\r\n");
-					sprintf(show, "a car leave");
-					LCD_P8x16Str(0,2,show);
-					motor_run(0, 90);//车位锁关闭
+					
+					LCD_P8x16Str(0,6,"car leave  ");
+					LCD_P8x16Str(0,4,"lock open ");
+					motor_run(1, 90);//车位锁打开
+					
+					//向协调器 汇报车辆离开 车位锁开启
+					state_af[1] = self_num[0]; //更新车位编号
+					state_af[2] = self_num[1];
+					USART2_send_data(state_af, 4);
 				}
 				
 			}
