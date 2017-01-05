@@ -40,3 +40,5 @@
 ..\obj\main.o: ..\HARDWARE\capture.h
 ..\obj\main.o: ..\HARDWARE\usart2.h
 ..\obj\main.o: ..\HARDWARE\lcd.h
+..\obj\main.o: ..\HARDWARE\dht11.h
+..\obj\main.o: ..\HARDWARE\stmflash.h

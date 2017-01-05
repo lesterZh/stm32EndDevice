@@ -256,3 +256,22 @@ void LCD_welcome(void)
 	LCD_P8x16Str(0, 6, "2016-10-01");
 }
 
+void LCD_show1(u8 * data) 
+{
+	LCD_P8x16Str(0, 0, data);
+}
+
+void LCD_show2(u8 * data) 
+{
+	LCD_P8x16Str(0, 2, data);
+}
+
+void LCD_show3(u8 * data) 
+{
+	LCD_P8x16Str(0, 4, data);
+}
+
+void LCD_show4(u8 * data) 
+{
+	LCD_P8x16Str(0, 6, data);
+}

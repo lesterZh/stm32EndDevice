@@ -25,5 +25,10 @@ void LCD_welcome(void);
 void LCD_CLS(void);
 void LCD_P8x16Str(unsigned char x, unsigned char y,unsigned char ch[]);
 	
+	void LCD_show1(u8 * data) ;
+	void LCD_show2(u8 * data) ;
+	void LCD_show3(u8 * data) ;
+	void LCD_show4(u8 * data) ;
+	
 #endif
 

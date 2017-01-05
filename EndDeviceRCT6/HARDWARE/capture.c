@@ -120,7 +120,7 @@ void EXTI1_IRQHandler(void)
 					have_car = 1;//认为有车来
 					//printf("\r\na car come in\r\n\r\n");
 					
-					LCD_P8x16Str(0,6,"car come in");
+					LCD_P8x16Str(0,6,"car come  ");
 				}
 				
 			} //is_lock_open == 0 && have_car == 1 && 
