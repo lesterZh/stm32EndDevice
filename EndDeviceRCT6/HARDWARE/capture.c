@@ -111,7 +111,7 @@ void EXTI1_IRQHandler(void)
 			LCD_P8x16Str(0,2,show);
 			
 			//is_lock_open == 0 && have_car == 0 && 
-			if (is_lock_open == 0 && have_car == 0 && cal_average < 1000) // < 0.5m
+			if (is_lock_open == 0 && have_car == 0 && cal_average < 1000) // < 1m
 			{
 				car_come_confirm++;
 				if (car_come_confirm == 3) //3次确认
@@ -124,7 +124,7 @@ void EXTI1_IRQHandler(void)
 				}
 				
 			} //is_lock_open == 0 && have_car == 1 && 
-			else if (is_lock_open == 0 && have_car == 1 && cal_average > 1500)
+			else if (is_lock_open == 0 && have_car == 1 && cal_average > 1200) // > 1.2m
 			{
 				car_leave_confirm++;
 				if (car_leave_confirm == 3) //3次确认
