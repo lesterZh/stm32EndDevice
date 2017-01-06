@@ -123,41 +123,17 @@ void LCD_show_humi(u8 * data)
 	LCD_P8x16Str(80, 6, data);
 }
 
-unsigned int timer10ms = 0;
-void TIM2_IRQHandler(void)   //TIM3中断
+void send_temp_humi()//将温湿度数据发送给协调器
 {
-	if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否:TIM 中断源 
-	{
-		TIM_ClearITPendingBit(TIM2, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
-		timer10ms++;
-		if (timer10ms % 50 == 0) 
-		{
-			LED1=!LED1;
-		}
-		
-		if (timer10ms % 100 == 0) 
-		{
-			//printf("angle %d\r\n",angle);  
-			LED2=!LED2;
-			//LED3=!LED3;
-			
-			//USART2_send_chars("d2\r\n");
-
-			DHT11_Read_Data(&temp, &humi);
-			sprintf(dht11_lcd, "t:%dC ",temp);
-			LCD_show_temp(dht11_lcd);
-			sprintf(dht11_lcd, "h:%d%%", humi);
-			LCD_show_humi(dht11_lcd);
-			
-		}
-		
-		if (timer10ms % 10 == 0) //1s测10次
-		{
-			//printf("angle %d\r\n",angle);
-			start_cal_distance();			
-		}
-	}
+	u8 data[5] = {0x5B, 0x00,0x00,0x00,0x00};
+	data[2] = self_num[1];
+	data[3] = temp;
+	data[4] = humi;
+	
+	USART2_send_data(data, 5);
 }
+
+
 
 
 void USART1_IRQHandler(void)                	//串口1中断服务程序
@@ -167,7 +143,7 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 	static u8 self_num_flag = 0;
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
-		res =USART_ReceiveData(USART1);	//读取接收到的数据
+		res = USART_ReceiveData(USART1);	//读取接收到的数据
 		
 		if (res == 0x51) //设置本节点编号
 		{
@@ -215,10 +191,12 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
     } 
 } 
 
+static u8 recCommandFlag = 0;
+volatile u16 cmd_time_out = 0;
 
 void USART2_IRQHandler(void)    
 {  
-    static u8 recCommandFlag = 0;
+    
 	u8 res;
 	if(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) == SET)  
     {       
@@ -228,6 +206,7 @@ void USART2_IRQHandler(void)
 		if (res == 0x5A) //接受到协议头0x5A
 		{
 			recCommandFlag = 1;
+			cmd_time_out = 1; //超时判断，当超过一定时间自动复位recCommandFlag
 			return;
 		} 
 		
@@ -243,7 +222,7 @@ void USART2_IRQHandler(void)
 					{
 						LCD_P8x16Str(0,4,"lock open ");
 						is_lock_open = 1;
-						motor_run(1, 90);
+						motor_run(0, 90);
 						
 					} 
 					else if (rec_buf[2] == 0x52 && is_lock_open == 1)// close lock，车辆可以进来
@@ -251,7 +230,7 @@ void USART2_IRQHandler(void)
 						LCD_P8x16Str(0,4,"lock close");
 						LCD_P8x16Str(0,6,"            ");
 						is_lock_open = 0;
-						motor_run(0, 90);
+						motor_run(1, 90);
 					}
 				}
 				
@@ -264,4 +243,60 @@ void USART2_IRQHandler(void)
     }
       
 }
+
+
+unsigned int timer10ms = 0;
+void TIM2_IRQHandler(void)   //TIM3中断
+{
+	if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否:TIM 中断源 
+	{
+		TIM_ClearITPendingBit(TIM2, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
+		timer10ms++;
+		if (timer10ms % 50 == 0) 
+		{
+			LED1=!LED1;
+		}
+
+/*		//温湿度传感器 数据采集 
+		if (timer10ms % 100 == 0) 
+		{
+			//printf("angle %d\r\n",angle);  
+			LED2=!LED2;
+			//LED3=!LED3;
+			
+			//USART2_send_chars("d2\r\n");
+
+			DHT11_Read_Data(&temp, &humi);
+			sprintf(dht11_lcd, "t:%dC ",temp);
+			LCD_show_temp(dht11_lcd);
+			sprintf(dht11_lcd, "h:%d%%", humi);
+			LCD_show_humi(dht11_lcd);
+			
+		}
+*/		
+		if (timer10ms % 10 == 0) //1s测10次
+		{
+			//printf("angle %d\r\n",angle);
+			start_cal_distance();			
+		}
+		
+		if (timer10ms % 500 == 0) //向协调器发送温湿度数据
+		{
+			//send_temp_humi();
+		}
+		
+		//超时判断，当超过一定时间自动复位recCommandFlag
+		if(cmd_time_out > 0) {
+			cmd_time_out++;
+		}
+		if (cmd_time_out > 10) //100ms
+		{
+			cmd_time_out = 0;
+			recCommandFlag = 0;
+			rec_index = 0;
+		}
+	}
+}
+
+
 

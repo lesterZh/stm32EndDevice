@@ -79,6 +79,8 @@ void start_cal_distance(void)
 char show[30] = {0};
 unsigned char state_af[4] = {0x5a,0,1,0x53}; //向协调器发送反馈状态
 
+int dis_come = 500, dis_leave = 800;//判定车辆到来或者离开后的检测距离
+
 //外部中断，计算echo引脚高电平的时间
 void EXTI1_IRQHandler(void)
 {
@@ -111,7 +113,7 @@ void EXTI1_IRQHandler(void)
 			LCD_P8x16Str(0,2,show);
 			
 			//is_lock_open == 0 && have_car == 0 && 
-			if (is_lock_open == 0 && have_car == 0 && cal_average < 1000) // < 1m
+			if (is_lock_open == 0 && have_car == 0 && cal_average < dis_come) // < 1m
 			{
 				car_come_confirm++;
 				if (car_come_confirm == 3) //3次确认
@@ -124,7 +126,7 @@ void EXTI1_IRQHandler(void)
 				}
 				
 			} //is_lock_open == 0 && have_car == 1 && 
-			else if (is_lock_open == 0 && have_car == 1 && cal_average > 1200) // > 1.2m
+			else if (is_lock_open == 0 && have_car == 1 && cal_average > dis_leave) // > 1.2m
 			{
 				car_leave_confirm++;
 				if (car_leave_confirm == 3) //3次确认
@@ -136,7 +138,7 @@ void EXTI1_IRQHandler(void)
 					
 					LCD_P8x16Str(0,6,"car leave  ");
 					LCD_P8x16Str(0,4,"lock open ");
-					motor_run(1, 90);//车位锁打开
+					motor_run(0, 90);//车位锁打开
 					
 					//向协调器 汇报车辆离开 车位锁开启
 					state_af[1] = self_num[0]; //更新车位编号
